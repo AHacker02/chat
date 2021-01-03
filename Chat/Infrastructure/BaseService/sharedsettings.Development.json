@@ -1,0 +1,6 @@
+{
+  "Token": "a389516d-871a-4b36-a127-278bf9a06e59",
+  "mongo": {
+    "connectionString": "mongodb+srv://ahacker:#Iamdevil1@arghya.wwkdv.mongodb.net/chatdb?retryWrites=true&w=majority"
+  }
+}

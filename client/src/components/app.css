@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body {
+    margin: 0px;
+    background: #252329;
+}
+
+/*
+.app__auth{
+    background: #120F13;
+    padding: 32px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+   border-radius: 5px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
+}
+
+.app__chat{
+    display: flex;
+}
+
+*/
