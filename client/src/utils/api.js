@@ -1,5 +1,6 @@
 import axios from "axios";
-import { BASE_URL } from "./endpoints";
+import { BASE_URL, LOGIN } from "./endpoints";
+import { login } from "../features/userSlice";
 
 const createCustomAxios = () => {
   let instance = axios.create({
@@ -15,10 +16,10 @@ const createCustomAxios = () => {
   //To add header again after refresh
   if (
     !instance.defaults.headers.common["Authorization"] &&
-    sessionStorage.getItem("auth")
+    sessionStorage.getItem("user")
   ) {
     instance.defaults.headers.common["Authorization"] = `Bearer ${
-      JSON.parse(sessionStorage.getItem("auth"))?.token
+      JSON.parse(sessionStorage.getItem("user"))?.token
     }`;
   }
   instance.CancelToken = axios.CancelToken;
@@ -38,12 +39,20 @@ const successHandler = (response) => {
 
 const errorHandler = (error) => {
   if (error.response.headers["application-error"]) {
-    return { ...error, message: error.response.headers["application-error"] };
+    error.message = error.response.headers["application-error"];
+  } else if (error.response.data.message) {
+    error.message = error.response.data.message;
   }
-  if (error.response.data.message) {
-    return { ...error, message: error.response.data.message };
+  return Promise.reject(error);
+};
+export const saveAuthToken = (store) => (next) => (action) => {
+  if (action.type === "user/login") {
+    // after a successful login, update the token in the API
+    setToken(action.payload.token);
   }
-  return error;
+
+  // continue processing this action
+  return next(action);
 };
 
 export const cancelTokenSource = axios.CancelToken.source();

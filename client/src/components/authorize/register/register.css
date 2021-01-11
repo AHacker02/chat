@@ -1,0 +1,47 @@
+.register {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: #f2f2f2;
+}
+
+.register__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px 2px lightgray;
+}
+
+.register__form > button {
+  margin-top: 20px;
+  width: 300px;
+  background-color: #3ea4fb;
+  color: #eff2f5;
+  font-weight: 800;
+}
+
+.register__form > button:hover {
+  background-color: gainsboro;
+  color: #3ea4fb;
+}
+
+.register__social {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 15px;
+  font-weight: lighter;
+}
+
+.register__social > img {
+  height: 48px !important;
+  cursor: pointer;
+}

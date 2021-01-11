@@ -1,90 +1,54 @@
 import React, { useEffect, useState } from "react";
-import ContactPanel from "./contactpanel";
-import MessageWindow from "./messagewindow";
 import "./chat.css";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core";
-import { HubConnectionBuilder } from "@microsoft/signalr";
-import { BASE_URL, SIGNALR } from "../../utils/endpoints";
-import { useDispatch, useSelector } from "react-redux";
-import { newMessage } from "../../actions/chatActions";
-import { UPDATE_CHAT_LIST } from "../../actions/types";
+import { IconButton } from "@material-ui/core";
+import MicNoneIcon from "@material-ui/icons/MicNone";
+import FlipMove from "react-flip-move";
+import Message from "./message/message";
+import { selectedChat } from "../../features/chatSlice";
+import { useSelector } from "react-redux";
+import db from "../../utils/firebase";
+import { selectUser } from "../../features/userSlice";
 
-const useStyles = makeStyles((theme) => ({
-  contactPanel: { width: "30%", height: "100vh" },
-  messagePanel: { width: "70%", height: "100vh" },
-}));
-
-const Chat = () => {
-  const classes = useStyles();
-  const [connection, setConnection] = useState(null);
-  const token = useSelector((state) => state.auth.token);
-  const user = useSelector((state) => state.chat.selectedChat);
-  const dispatch = useDispatch();
-  const sendMessage = async ({ message }) => {
-    await connection.send("SendMessage", user.id, user.clientId, message);
-  };
-  const registerTopics = () => {
-    connection.on("Online", (user) => {
-      console.log("Online");
-      console.log(user);
-      dispatch({
-        type: UPDATE_CHAT_LIST,
-        payload: [user],
-      });
-    });
-    connection.on("Chats", (contacts) => {
-      console.log("Chats");
-      console.log(contacts);
-      dispatch({
-        type: UPDATE_CHAT_LIST,
-        payload: contacts,
-      });
-    });
-    connection.on("Offline", (user) => {
-      console.log(user);
-    });
-    connection.on("Message", (msg) => {
-      console.log(msg);
-      dispatch(newMessage(msg));
-    });
-  };
-
-  useEffect(() => {
-    let conn = new HubConnectionBuilder()
-      .withUrl(BASE_URL + SIGNALR, {
-        accessTokenFactory: () => token,
-      })
-      .withAutomaticReconnect()
-      .build();
-    setConnection(conn);
-  }, [token]);
-
-  useEffect(() => {
-    if (connection && !connection.connectionStarted) {
-      connection
-        .start()
-        .then(() => {
-          console.info("SignalR Connected");
-          registerTopics();
-        })
-        .catch((err) => console.error("SignalR Connection Error: ", err));
-    }
-  }, [connection]);
-
-  window.addEventListener("beforeunload", (ev) => {
-    connection.stop();
-  });
+const Chat = ({ sendMessage }) => {
+  const [input, setInput] = useState("");
+  const chat = useSelector(selectedChat);
 
   return (
-    <Grid container spacing={0}>
-      <Grid item container className={classes.contactPanel}>
-        <ContactPanel />
-      </Grid>
-      <Grid item container className={classes.messagePanel}>
-        <MessageWindow sendMessage={sendMessage} />
-      </Grid>
-    </Grid>
+    <div className="chat">
+      <div className="chat__header">
+        <h4>
+          To:{" "}
+          <span className="chat__name">{`${chat?.firstName} ${chat?.lastName}`}</span>
+        </h4>
+        <strong>Details</strong>
+      </div>
+      <div className="chat__messages">
+        <FlipMove>
+          {chat?.messages.map((msg) => (
+            <Message key={msg.id} {...msg} />
+          ))}
+        </FlipMove>
+      </div>
+      <div className="chat__input">
+        <form
+          onSubmit={() => {
+            sendMessage(input);
+            setInput(null);
+          }}
+        >
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type a message"
+            type="text"
+          />
+          <button type="submit">Send Message</button>
+        </form>
+        <IconButton>
+          <MicNoneIcon className="chat__mic" />
+        </IconButton>
+      </div>
+    </div>
   );
 };
 

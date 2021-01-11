@@ -1,0 +1,61 @@
+.sidebar {
+  flex: 0.35;
+  max-width: 35%;
+  height: 100vh;
+  flex-direction: column;
+  display: flex;
+  background-color: #f5f5f5;
+  border-right: 1px solid lightgray;
+}
+
+.sidebar__header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  height: 50px;
+}
+
+.sidebar__avatar {
+  cursor: pointer;
+  margin: 10px;
+}
+
+/*.sidebar__input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    background-color: #e1e1e1;
+    color: gray;
+    border-radius: 5px;
+}
+
+.sidebar__input > input {
+    border: none;
+    background: transparent;
+    outline-width: 0;
+}*/
+
+.sidebar__input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: gray;
+  border-radius: 5px;
+}
+.MuiAutocomplete-root {
+  width: 100%;
+}
+.sidebar__chat {
+  overflow: scroll;
+}
+
+.sidebar__chat::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar__chat {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
