@@ -1,6 +1,6 @@
 # SignalR, React, Redux Chat Application
 
-This is real-time chat application using SignalR, React and Redux.
+This is real-time iMessage clone chat application using SignalR, React and Redux.
 
 ## Features
 
