@@ -1,6 +1,5 @@
 import axios from "axios";
-import { BASE_URL, LOGIN } from "./endpoints";
-import { login } from "../features/userSlice";
+import { BASE_URL } from "./endpoints";
 
 const createCustomAxios = () => {
   let instance = axios.create({

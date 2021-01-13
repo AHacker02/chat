@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./chat.css";
 import { IconButton } from "@material-ui/core";
 import MicNoneIcon from "@material-ui/icons/MicNone";
@@ -6,21 +6,37 @@ import FlipMove from "react-flip-move";
 import Message from "./message/message";
 import { selectedChat } from "../../features/chatSlice";
 import { useSelector } from "react-redux";
-import db from "../../utils/firebase";
-import { selectUser } from "../../features/userSlice";
 
 const Chat = ({ sendMessage }) => {
   const [input, setInput] = useState("");
   const chat = useSelector(selectedChat);
+  const bottomRef = useRef();
+
+  const scrollToBottom = () => {
+    bottomRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
 
   return (
     <div className="chat">
       <div className="chat__header">
         <h4>
           To:{" "}
-          <span className="chat__name">{`${chat?.firstName} ${chat?.lastName}`}</span>
+          <span className="chat__name">
+            {chat ? `${chat?.firstName} ${chat?.lastName}` : null}
+          </span>
         </h4>
-        <strong>Details</strong>
+        {/*<strong>Details</strong>*/}
       </div>
       <div className="chat__messages">
         <FlipMove>
@@ -28,12 +44,14 @@ const Chat = ({ sendMessage }) => {
             <Message key={msg.id} {...msg} />
           ))}
         </FlipMove>
+        <div ref={bottomRef} className="list-bottom"></div>
       </div>
       <div className="chat__input">
         <form
-          onSubmit={() => {
+          onSubmit={(e) => {
+            e.preventDefault();
             sendMessage(input);
-            setInput(null);
+            setInput("");
           }}
         >
           <input

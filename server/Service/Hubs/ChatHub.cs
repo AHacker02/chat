@@ -67,27 +67,31 @@ namespace Service.Hubs
                 await _userRepository.UpdateUserAsync(user,
                     new[] {"ClientId", "Status"}); //TODO: Update to redis on large scale
 
-                
-                var contactMessageGroup = (await _messageRepository.GetMessagesToAsync(userId)).GroupBy(g => g.FromUserId).ToList();
-                contactMessageGroup.AddRange((await _messageRepository.GetMessagesFromAsync(userId)).GroupBy(g => g.ToUserId).ToList());
-                var users = await _userRepository.GetAllUserAsync();
 
-                var contacts = contactMessageGroup.Join(users, c => c.Key, u => u.Id,
-                    (c, u) => new ContactsViewModel()
-                    {
-                        Id = u.Id,
-                        ClientId = u.ClientId,
-                        FirstName = u.FirstName,
-                        LastName = u.LastName,
-                        Email = u.Email,
-                        Status = u.Status,
-                        LastMessage = c.OrderByDescending(x => x.SentAt).FirstOrDefault()?.MessageText,
-                        LastMessageTime = c.OrderByDescending(x => x.SentAt).DefaultIfEmpty(new Message()).First().SentAt,
-                        PendingMessages = c.Count(x => !x.IsRead)
-                    });
+                var lastMessage = (await _messageRepository.GetConversationsToUserAsync(userId)).ToList();
+                var users = (await _userRepository.GetAllUserAsync()).ToList();
 
-                //Notify contacts
-                await Clients.Clients(
+
+            //var contactMessageGroup = (await _messageRepository.GetMessagesToAsync(userId)).GroupBy(g => g.FromUserId).ToList();
+            //    contactMessageGroup.AddRange((await _messageRepository.GetMessagesFromAsync(userId)).GroupBy(g => g.ToUserId).ToList());
+
+
+            var contacts = lastMessage.Join(users, c => c.Key, u => u.Id,
+                (c, u) => new ContactsViewModel()
+                {
+                    Id = u.Id,
+                    ClientId = u.ClientId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    Status = u.Status,
+                    LastMessage = c.OrderByDescending(x => x.SentAt).First().MessageText,
+                    LastMessageTime = c.OrderByDescending(x => x.SentAt).First().SentAt,
+                    PendingMessages = c.Count(x => !x.IsRead)
+                });
+
+            //Notify contacts
+            await Clients.Clients(
                         contacts
                             .Where(x => x.ClientId != null)
                             .Select(x => x.ClientId).ToList()

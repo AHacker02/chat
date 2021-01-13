@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Avatar,
   IconButton,
   InputAdornment,
-  makeStyles,
   TextField,
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
@@ -12,8 +11,8 @@ import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
 import "./sidebar.css";
 import SidebarChat from "./sidebarchat/sidebarchat";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
-import db, { auth } from "../../utils/firebase";
+import { logout, selectUser } from "../../features/userSlice";
+import { auth } from "../../utils/firebase";
 import {
   searchContact,
   selectChat,
@@ -29,26 +28,22 @@ const Sidebar = () => {
   const loading = useSelector((state) => selectLoading(state, "search"));
   const searchResult = useSelector(selectSearchResult);
 
-  const addChat = () => {
-    const chatName = prompt("Please enter a chat name");
-    if (chatName) {
-      db.collection("chats").add({
-        chatName: chatName,
-      });
-    }
-  };
-
   const handleSearch = (e) => {
     if (e.target.value) {
       dispatch(searchContact(e.target.value));
     }
   };
 
+  const signOut = () => {
+    auth.signOut();
+    dispatch(logout());
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar__header">
         <Avatar
-          onClick={() => auth.signOut()}
+          onClick={signOut}
           src={
             user.photo ??
             `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=random`
@@ -93,7 +88,7 @@ const Sidebar = () => {
         </div>
 
         <IconButton>
-          <RateReviewOutlinedIcon onClick={addChat} />
+          <RateReviewOutlinedIcon />
         </IconButton>
       </div>
       <div className="sidebar__chat">

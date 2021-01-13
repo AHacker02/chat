@@ -4,9 +4,14 @@ import { Button, FormControl, FormLabel } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
 import FormTextField from "../../common/formtextfield";
 import { useDispatch, useSelector } from "react-redux";
-import { selectFormError, selectLoading } from "../../../features/appSlice";
+import {
+  selectFormError,
+  selectLoading,
+  setFormError,
+} from "../../../features/appSlice";
 import { Link } from "react-router-dom";
 import { register } from "../../../features/userSlice";
+import { auth, provider } from "../../../utils/firebase";
 
 const fields = [
   { name: "firstname", type: "text" },
@@ -20,6 +25,22 @@ const Register = (props) => {
   const formError = useSelector((state) => selectFormError(state, formName));
   const loading = useSelector((state) => selectLoading(state, formName));
   const dispatch = useDispatch();
+
+  const googleSignUp = () => {
+    auth
+      .signInWithPopup(provider)
+      .then(({ user }) => {
+        signUp({
+          firstName: user.displayName.substr(0, user.displayName.indexOf(" ")),
+          lastName: user.displayName.substr(user.displayName.indexOf(" ") + 1),
+          email: user.email,
+          password: user.uid,
+        });
+      })
+      .catch((error) =>
+        dispatch(setFormError({ name: formName, error: error.message }))
+      );
+  };
   const signUp = (userDetails) => {
     dispatch(register(userDetails));
   };
@@ -52,7 +73,7 @@ const Register = (props) => {
         <div className="register__social">
           <small>Or Sign Up Using</small>
           <img
-            //onClick={googleSignIn}
+            onClick={googleSignUp}
             src="https://img-authors.flaticon.com/google.jpg"
             alt=""
           />

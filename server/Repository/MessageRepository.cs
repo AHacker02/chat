@@ -9,7 +9,7 @@ using Repository.Abstractions;
 
 namespace Repository
 {
-    public class MessageRepository:IMessageRepository
+    public class MessageRepository : IMessageRepository
     {
         private readonly INoSqlDataAccess _database;
 
@@ -18,10 +18,10 @@ namespace Repository
             _database = database;
         }
 
-        public async Task<IEnumerable<Message>> GetMessagesBetweenAsync(string to, string from,int maxResults,int page)
+        public async Task<IEnumerable<Message>> GetMessagesBetweenAsync(string to, string from, int maxResults, int page)
             => (await _database
-                .Find<Message>(m => (m.ToUserId == to && m.FromUserId == from) || (m.ToUserId==from && m.FromUserId==to)))
-                .Skip(page*maxResults)
+                .Find<Message>(m => (m.ToUserId == to && m.FromUserId == from) || (m.ToUserId == from && m.FromUserId == to)))
+                .Skip(page * maxResults)
                 .Take(maxResults)
                 .ToList();
 
@@ -33,5 +33,10 @@ namespace Repository
 
         public async Task AddMessageAsync(Message message)
             => await _database.Add(message);
+
+        public async Task<IQueryable<IGrouping<string,Message>>> GetConversationsToUserAsync(string userId)
+       => (await _database.Find<Message>(m => m.ToUserId == userId || m.FromUserId == userId)).ToList()
+                .GroupBy(g => g.FromUserId == userId ? g.ToUserId : g.FromUserId).AsQueryable();
+
     }
 }

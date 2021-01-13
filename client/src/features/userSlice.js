@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { LOGIN, SIGNUP } from "../utils/endpoints";
 import { setFormError, setLoading } from "./appSlice";
-import history from "../utils/history";
+import { resetChat } from "./chatSlice";
 
 const initialUser = sessionStorage.getItem("user")
   ? JSON.parse(sessionStorage.getItem("user"))
@@ -46,26 +46,27 @@ export const register = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk("user/logout", async (_, thunkApi) => {
+  thunkApi.dispatch(resetChat());
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {
     user: initialUser,
-  },
-  reducers: {
-    logout: (state) => {
-      state.user = null;
-      localStorage.removeItem("user");
-    },
   },
   extraReducers: {
     [login.fulfilled]: (state, action) => {
       state.user = action.payload;
       sessionStorage.setItem("user", JSON.stringify(action.payload));
     },
+    [logout.fulfilled]: (state) => {
+      state.user = null;
+      sessionStorage.removeItem("user");
+    },
   },
 });
 
-export const { logout } = userSlice.actions;
 export const selectUser = (state) => state.user.user?.user;
 export const selectToken = (state) => state.user.user?.token;
 export default userSlice.reducer;

@@ -1,7 +1,7 @@
 import "./login.css";
 import { Field, reduxForm } from "redux-form";
 import React from "react";
-import { Button, FormControl, TextField, FormLabel } from "@material-ui/core";
+import { Button, FormControl, FormLabel } from "@material-ui/core";
 import { auth, provider } from "../../../utils/firebase";
 import FormTextField from "../../common/formtextfield";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +29,7 @@ const Login = (props) => {
     auth
       .signInWithPopup(provider)
       .then((user) => {
-        signIn(signIn({ email: user.user.email }));
+        signIn({ email: user.user.email });
       })
       .catch((error) =>
         dispatch(setFormError({ name: formName, error: error.message }))

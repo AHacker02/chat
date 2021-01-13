@@ -1,17 +1,21 @@
 import React from "react";
 import { Avatar } from "@material-ui/core";
 import "./sidebarchat.css";
-import { useDispatch } from "react-redux";
-import { selectChat, setChatList } from "../../../features/chatSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectChat, selectedChat } from "../../../features/chatSlice";
+import moment from "moment";
 
 const SidebarChat = ({ contact }) => {
   const dispatch = useDispatch();
+  const selected = useSelector(selectedChat);
   return (
     <div
       onClick={() => {
         dispatch(selectChat(contact));
       }}
-      className="sidebarChat"
+      className={`sidebarChat ${
+        selected?.id === contact.id ? "sidebarChat__selected" : null
+      }`}
     >
       <Avatar
         src={
@@ -22,9 +26,16 @@ const SidebarChat = ({ contact }) => {
       <div className="sidebarChat__info">
         <h3>{`${contact.firstName} ${contact.lastName}`}</h3>
         <p>
-          {contact.lastMessage} <small>{contact.lastMessageTime}</small>
+          {contact.lastMessage}
+          {/*<small>{moment(contact.lastMessageTime).calendar()}</small>*/}
         </p>
-        <small>{contact.Status}</small>
+        <small>
+          {contact.status
+            ? contact.status === "Online"
+              ? "Online"
+              : moment(contact.status).calendar()
+            : null}
+        </small>
       </div>
     </div>
   );

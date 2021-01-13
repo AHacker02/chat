@@ -3,14 +3,14 @@ import Sidebar from "../sidebar/sidebar";
 import Chat from "../chat/chat";
 import "./imessage.css";
 import { useDispatch, useSelector } from "react-redux";
-import { selectToken, selectUser, userSlice } from "../../features/userSlice";
+import { selectToken, selectUser } from "../../features/userSlice";
 import { BASE_URL, SIGNALR } from "../../utils/endpoints";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import {
-  setChatList,
   addMessage,
-  setStatus,
   selectedChat,
+  setChatList,
+  setStatus,
 } from "../../features/chatSlice";
 
 const Imessage = () => {
@@ -27,7 +27,7 @@ const Imessage = () => {
       .build();
 
     setConnection(newConnection);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (connection) {
@@ -53,13 +53,16 @@ const Imessage = () => {
         dispatch(setStatus(user));
       });
     }
+    return () => {
+      debugger;
+      connection?.stop();
+    };
   }, [connection]);
 
-  const sendMessage = async (message) => {
-    debugger;
+  const sendMessage = (message) => {
     if (connection.connectionStarted) {
       try {
-        await connection.send("SendMessage", chat.id, clientId, message);
+        connection.invoke("SendMessage", chat.id, clientId, message);
       } catch (e) {
         console.log(e);
       }

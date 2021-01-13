@@ -41,5 +41,12 @@ namespace Repository.Abstractions
         /// <param name="message"></param>
         /// <returns></returns>
         Task AddMessageAsync(Message message);
+
+        /// <summary>
+        /// Get all conversations to user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<IQueryable<IGrouping<string, Message>>> GetConversationsToUserAsync(string userId);
     }
 }
