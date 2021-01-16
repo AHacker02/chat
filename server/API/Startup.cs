@@ -28,10 +28,11 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR(options =>
-            {
-                options.ClientTimeoutInterval=TimeSpan.FromSeconds(5);
-            });
+            //services.AddSignalR(options =>
+            //{
+            //    options.ClientTimeoutInterval=TimeSpan.FromSeconds(5);
+            //});
+            services.AddSignalR();
             base.ConfigureApplicationServices(services, new OpenApiInfo
             {
                 Version = "v1",

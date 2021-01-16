@@ -5,3 +5,4 @@ export const EMAIL_CHECK = "/api/Auth/check-email";
 export const SEARCH = "/api/user/search";
 export const MESSAGES = "/api/chat/messages";
 export const SIGNALR = "chat";
+export const CREATE_GROUP = "/api/chat/create-group";

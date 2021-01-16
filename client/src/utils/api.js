@@ -45,7 +45,7 @@ const errorHandler = (error) => {
   return Promise.reject(error);
 };
 export const saveAuthToken = (store) => (next) => (action) => {
-  if (action.type === "user/login") {
+  if (action.type === "user/login/fulfilled") {
     // after a successful login, update the token in the API
     setToken(action.payload.token);
   }

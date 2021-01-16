@@ -6,10 +6,21 @@ import FlipMove from "react-flip-move";
 import Message from "./message/message";
 import { selectedChat } from "../../features/chatSlice";
 import { useSelector } from "react-redux";
+import _ from "lodash";
 
 const Chat = ({ sendMessage }) => {
   const [input, setInput] = useState("");
   const chat = useSelector(selectedChat);
+  let messages;
+  if (chat) {
+    try {
+      messages = chat.messages;
+      messages = _.orderBy(messages, ["sentAt"], ["asc"]);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const bottomRef = useRef();
 
   const scrollToBottom = () => {
@@ -40,11 +51,11 @@ const Chat = ({ sendMessage }) => {
       </div>
       <div className="chat__messages">
         <FlipMove>
-          {chat?.messages.map((msg) => (
+          {messages?.map((msg) => (
             <Message key={msg.id} {...msg} />
           ))}
         </FlipMove>
-        <div ref={bottomRef} className="list-bottom"></div>
+        <div ref={bottomRef} className="list-bottom" />
       </div>
       <div className="chat__input">
         <form
@@ -56,15 +67,16 @@ const Chat = ({ sendMessage }) => {
         >
           <input
             value={input}
+            disabled={!chat}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message"
             type="text"
           />
           <button type="submit">Send Message</button>
         </form>
-        <IconButton>
+        {/*<IconButton>
           <MicNoneIcon className="chat__mic" />
-        </IconButton>
+        </IconButton>*/}
       </div>
     </div>
   );

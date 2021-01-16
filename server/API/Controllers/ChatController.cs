@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Common.DataSets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Service.Abstractions;
+using Service.Hubs;
 
 namespace API.Controllers
 {
@@ -49,6 +52,32 @@ namespace API.Controllers
             var toUserId= User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var messages = await _chatService.GetMessagesAsync(toUserId,userId, maxResults, page);
             return Ok(messages);
+        }
+
+        /// <summary>
+        /// Create group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        [HttpPost("chat/create-group")]
+        public async Task<IActionResult> CreateGroup(Group group)
+        {
+            var response = await _chatService.CreateGroupAsync(group);
+            return Ok(response);
+        }
+
+
+        /// <summary>
+        /// Add new user to group
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpPut("chat/add-group-user")]
+        public async Task<IActionResult> AddUserToGroup(string groupId, string[] userId)
+        {
+            var response=await _chatService.AddUserToGroupAsync(groupId, userId);
+            return Ok(response);
         }
     }
 }

@@ -4,7 +4,7 @@ export const appSlice = createSlice({
   name: "app",
   initialState: {
     form: {},
-    loading: {},
+    loading: { group: false },
   },
   reducers: {
     setFormError: (state, action) => {

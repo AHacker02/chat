@@ -35,6 +35,14 @@ namespace Repository
                 var db = new MongoDbDataAccess(connection, collection);
                 return new MessageRepository(db);
             });
+
+            builder.Register<IGroupRepository>(c =>
+            {
+                var connection = c.Resolve<IConnectionFactory>();
+                var collection = _configuration["mongo:collection:group"];
+                var db = new MongoDbDataAccess(connection, collection);
+                return new GroupRepository(db);
+            });
         }
     }
 }

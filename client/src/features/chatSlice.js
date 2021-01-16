@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import _ from "lodash";
 import api from "../utils/api";
-import { MESSAGES, SEARCH } from "../utils/endpoints";
+import { CREATE_GROUP, MESSAGES, SEARCH } from "../utils/endpoints";
 
 let cancelToken;
 
@@ -33,6 +33,13 @@ export const selectChat = createAsyncThunk(
   }
 );
 
+export const createGroup = createAsyncThunk(
+  "chat/createGroup",
+  async (group, thunkAPI) => {
+    const response = await api.post(CREATE_GROUP, JSON.stringify(group));
+  }
+);
+
 const INITIAL_STATE = {
   chats: {},
   selectedChat: null,
@@ -50,6 +57,7 @@ export const chatSlice = createSlice({
     },
     setStatus: (state, action) => {
       state.chats[action.payload.id].status = action.payload.status;
+      state.chats[action.payload.id].clientId = action.payload.clientId;
     },
     addMessage: (state, action) => {
       let userId;
@@ -61,7 +69,7 @@ export const chatSlice = createSlice({
       //state.chats[userId].messages.push(action.payload);
       state.chats[userId].lastMessage = action.payload.messageText;
       state.chats[userId].lastMessageTime = action.payload.sentAt;
-      if (state.selectedChat.id === userId) {
+      if (state.selectedChat?.id === userId) {
         state.selectedChat.messages.push(action.payload);
       }
     },

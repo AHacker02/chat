@@ -28,5 +28,20 @@ namespace Service.Abstractions
         /// <param name="page"></param>
         /// <returns></returns>
         Task<Response<IEnumerable<Message>>> GetMessagesAsync(string toUserId,string fromUserId, int maxResults, int page);
+
+        /// <summary>
+        /// Create group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        Task<Response> CreateGroupAsync(Group @group);
+
+        /// <summary>
+        /// Add users to group
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<Response> AddUserToGroupAsync(string groupId, string[] userId);
     }
 }

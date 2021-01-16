@@ -21,6 +21,7 @@ namespace Repository
         public async Task<IEnumerable<Message>> GetMessagesBetweenAsync(string to, string from, int maxResults, int page)
             => (await _database
                 .Find<Message>(m => (m.ToUserId == to && m.FromUserId == from) || (m.ToUserId == from && m.FromUserId == to)))
+                .OrderByDescending(x=>x.SentAt)
                 .Skip(page * maxResults)
                 .Take(maxResults)
                 .ToList();

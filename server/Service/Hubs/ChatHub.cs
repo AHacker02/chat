@@ -17,38 +17,13 @@ namespace Service.Hubs
     {
         private readonly IUserRepository _userRepository;
         private readonly IMessageRepository _messageRepository;
+        private readonly IGroupRepository _groupRepository;
 
-        public ChatHub(IUserRepository userRepository,IMessageRepository messageRepository)
+        public ChatHub(IUserRepository userRepository,IMessageRepository messageRepository,IGroupRepository groupRepository)
         {
             _userRepository = userRepository;
             _messageRepository = messageRepository;
-        }
-
-        /// <summary>
-        /// Send Message to other Users
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="clientId"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public async Task SendMessage(string userId,string clientId,string message)
-        {
-            var msg = new Message()
-            {
-                Id = ObjectId.GenerateNewId().ToString(),
-                FromUserId = Context.UserIdentifier,
-                ToUserId = userId,
-                MessageText = message,
-                SentAt = DateTime.UtcNow
-            };
-            if (clientId != null)
-            {
-                await Clients.Client(clientId).SendAsync("Message", msg)
-                    .ConfigureAwait(false);
-            }
-
-            await _messageRepository.AddMessageAsync(msg).ConfigureAwait(false);
-            await Clients.Caller.SendAsync("Message", msg).ConfigureAwait(false);
+            _groupRepository = groupRepository;
         }
 
         /// <summary>
@@ -65,39 +40,10 @@ namespace Service.Hubs
                 user.ClientId = Context.ConnectionId;
                 user.Status = "Online";
                 await _userRepository.UpdateUserAsync(user,
-                    new[] {"ClientId", "Status"}); //TODO: Update to redis on large scale
+                    new[] {"ClientId", "Status"}).ConfigureAwait(false); //TODO: Update to redis on large scale
 
-
-                var lastMessage = (await _messageRepository.GetConversationsToUserAsync(userId)).ToList();
-                var users = (await _userRepository.GetAllUserAsync()).ToList();
-
-
-            //var contactMessageGroup = (await _messageRepository.GetMessagesToAsync(userId)).GroupBy(g => g.FromUserId).ToList();
-            //    contactMessageGroup.AddRange((await _messageRepository.GetMessagesFromAsync(userId)).GroupBy(g => g.ToUserId).ToList());
-
-
-            var contacts = lastMessage.Join(users, c => c.Key, u => u.Id,
-                (c, u) => new ContactsViewModel()
-                {
-                    Id = u.Id,
-                    ClientId = u.ClientId,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Email = u.Email,
-                    Status = u.Status,
-                    LastMessage = c.OrderByDescending(x => x.SentAt).First().MessageText,
-                    LastMessageTime = c.OrderByDescending(x => x.SentAt).First().SentAt,
-                    PendingMessages = c.Count(x => !x.IsRead)
-                });
-
-            //Notify contacts
-            await Clients.Clients(
-                        contacts
-                            .Where(x => x.ClientId != null)
-                            .Select(x => x.ClientId).ToList()
-                    ).SendAsync("UserStatus", user)
-                    .ConfigureAwait(false);
-
+                var contacts = (await NotifyUserStatus(user).ConfigureAwait(false)).ToList();
+                contacts.AddRange(await AddGroups(user).ConfigureAwait(false));
                 //Send old chats to user
                 await Clients.Caller.SendAsync("Chats", contacts).ConfigureAwait(false);
             
@@ -119,18 +65,119 @@ namespace Service.Hubs
             user.Status = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
             await _userRepository.UpdateUserAsync(user, new[] { "ClientId", "Status" });  //TODO: Update to redis on large scale
 
-            var messages = await _messageRepository.GetMessagesFromAsync(userId);
-            var users = await _userRepository.GetAllUserAsync();
-
-            var clientIds = (from m in messages
-                join u in users
-                    on m.ToUserId equals u.Id
-                where u.ClientId != null
-                select u.ClientId).ToList();
-
+            var contacts = await NotifyUserStatus(user).ConfigureAwait(false);
+            await RemoveFromGroups(user).ConfigureAwait(false);
             //Notify Users
-            await Clients.Clients(clientIds).SendAsync("UserStatus", user).ConfigureAwait(false);
             await base.OnDisconnectedAsync(exception);
+        }
+
+        /// <summary>
+        /// Send Message to other Users
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="clientId"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task SendMessage(string userId, string clientId, string message)
+        {
+            var msg = new Message()
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                FromUserId = Context.UserIdentifier,
+                ToUserId = userId,
+                MessageText = message,
+                SentAt = DateTime.UtcNow
+            };
+            if (clientId != null)
+            {
+                await Clients.Client(clientId).SendAsync("Message", msg)
+                    .ConfigureAwait(false);
+            }
+            else if (await _groupRepository.IsGroup(userId))
+            {
+                await Clients.GroupExcept(userId, new[] {Context.ConnectionId}).SendAsync("Message", msg);
+            }
+
+            await _messageRepository.AddMessageAsync(msg).ConfigureAwait(false);
+            await Clients.Caller.SendAsync("Message", msg).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
+        /// Add user to groups
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<ContactsViewModel>> AddGroups(User user)
+        {
+            var groups = await _groupRepository.GetUserGroupsAsync(user.Id);
+            var groupContact=new List<ContactsViewModel>();
+            foreach (var group in groups)
+            {
+                var message = (await _messageRepository.GetMessagesToAsync(group.Id)).OrderByDescending(m=>m.SentAt).FirstOrDefault();
+                groupContact.Add(new ContactsViewModel()
+                {
+                    Id = group.Id,
+                    FirstName = group.Name,
+                    LastName = String.Empty,
+                    LastMessage = message?.MessageText,
+                    LastMessageTime = message?.SentAt
+                });
+                await Groups.AddToGroupAsync(Context.ConnectionId, group.Id);
+            }
+
+            return groupContact;
+        }
+
+        /// <summary>
+        /// Remove user from groups
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        private async Task RemoveFromGroups(User user)
+        {
+            var groups = await _groupRepository.GetUserGroupsAsync(user.Id);
+
+            foreach (var group in groups)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, group.Id);
+            }
+        }
+
+        /// <summary>
+        /// Notify all online contacts of user status
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<ContactsViewModel>> NotifyUserStatus(User user )
+        {
+            var lastMessage = (await _messageRepository.GetConversationsToUserAsync(user.Id)).ToList();
+            var users = (await _userRepository.GetAllUserAsync()).ToList();
+
+            var contacts = lastMessage.Join(users, c => c.Key, u => u.Id,
+                (c, u) => new ContactsViewModel()
+                {
+                    Id = u.Id,
+                    ClientId = u.ClientId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    Status = u.Status,
+                    LastMessage = c.OrderByDescending(x => x.SentAt).First().MessageText,
+                    LastMessageTime = c.OrderByDescending(x => x.SentAt).First().SentAt,
+                    PendingMessages = c.Count(x => !x.IsRead),
+                    IsGroup = true
+                });
+
+            //Notify contacts
+            await Clients.Clients(
+                    contacts
+                        .Where(x => x.ClientId != null)
+                        .Select(x => x.ClientId).ToList()
+                ).SendAsync("UserStatus", user)
+                .ConfigureAwait(false);
+
+            return contacts;
         }
     }
 }

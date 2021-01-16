@@ -3,7 +3,7 @@ import Sidebar from "../sidebar/sidebar";
 import Chat from "../chat/chat";
 import "./imessage.css";
 import { useDispatch, useSelector } from "react-redux";
-import { selectToken, selectUser } from "../../features/userSlice";
+import { logout, selectToken, selectUser } from "../../features/userSlice";
 import { BASE_URL, SIGNALR } from "../../utils/endpoints";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import {
@@ -12,12 +12,14 @@ import {
   setChatList,
   setStatus,
 } from "../../features/chatSlice";
+import { auth } from "../../utils/firebase";
+import Group from "../group/group";
+import { selectLoading } from "../../features/appSlice";
 
 const Imessage = () => {
   const token = useSelector(selectToken);
   const [connection, setConnection] = useState(null);
   const chat = useSelector(selectedChat);
-  const { clientId } = useSelector(selectUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,16 +55,12 @@ const Imessage = () => {
         dispatch(setStatus(user));
       });
     }
-    return () => {
-      debugger;
-      connection?.stop();
-    };
   }, [connection]);
 
   const sendMessage = (message) => {
     if (connection.connectionStarted) {
       try {
-        connection.invoke("SendMessage", chat.id, clientId, message);
+        connection.invoke("SendMessage", chat.id, chat.clientId, message);
       } catch (e) {
         console.log(e);
       }
@@ -70,11 +68,17 @@ const Imessage = () => {
       alert("No connection to server yet.");
     }
   };
+  const signOut = () => {
+    auth.signOut();
+    dispatch(logout());
+    connection.stop();
+  };
 
   return (
     <div className="imessage">
-      <Sidebar />
+      <Sidebar signOut={signOut} />
       <Chat sendMessage={sendMessage} />
+      <Group />
     </div>
   );
 };

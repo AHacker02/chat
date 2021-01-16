@@ -1,0 +1,32 @@
+.group {
+  text-align: center;
+}
+
+.group__list {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  max-height: 100px;
+  overflow: scroll;
+}
+
+.group__user {
+  display: flex;
+  margin-top: 7px;
+}
+
+.group__user > h3 {
+  margin: auto;
+  padding-left: 5px;
+}
+
+.group__list::-webkit-scrollbar {
+  display: none;
+}
+
+.group__list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

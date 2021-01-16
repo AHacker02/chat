@@ -1,42 +1,26 @@
 import React from "react";
-import {
-  Avatar,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
-import SearchIcon from "@material-ui/icons/Search";
+import { Avatar, IconButton } from "@material-ui/core";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
 import "./sidebar.css";
 import SidebarChat from "./sidebarchat/sidebarchat";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, selectUser } from "../../features/userSlice";
-import { auth } from "../../utils/firebase";
+import { selectUser } from "../../features/userSlice";
 import {
   searchContact,
   selectChat,
   selectChatList,
   selectSearchResult,
 } from "../../features/chatSlice";
-import { selectLoading } from "../../features/appSlice";
+import { selectLoading, setLoading } from "../../features/appSlice";
+import SearchUser from "../common/SearchUser";
 
-const Sidebar = () => {
+const Sidebar = ({ signOut }) => {
   const user = useSelector(selectUser);
   const chats = Object.values(useSelector(selectChatList));
   const dispatch = useDispatch();
-  const loading = useSelector((state) => selectLoading(state, "search"));
-  const searchResult = useSelector(selectSearchResult);
 
-  const handleSearch = (e) => {
-    if (e.target.value) {
-      dispatch(searchContact(e.target.value));
-    }
-  };
-
-  const signOut = () => {
-    auth.signOut();
-    dispatch(logout());
+  const selectResult = (value) => {
+    dispatch(selectChat(value));
   };
 
   return (
@@ -53,41 +37,12 @@ const Sidebar = () => {
         <div className="sidebar__input">
           {/* <SearchIcon />*/}
           {/*<input placeholder="Search" />*/}
-          <Autocomplete
-            freeSolo
-            disableClearable
-            onChange={(event, value) => {
-              dispatch(selectChat(value));
-            }}
-            loading={loading}
-            filterOptions={(options, state) => options}
-            getOptionLabel={(option) =>
-              `${option.firstName} ${option.lastName}`
-            }
-            options={searchResult}
-            renderInput={(params) => (
-              <TextField
-                onChange={handleSearch}
-                {...params}
-                placeholder="Search user"
-                margin="dense"
-                fullWidth
-                variant="outlined"
-                InputProps={{
-                  ...params.InputProps,
-                  type: "search",
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
-          />
+          <SearchUser variant="outlined" selectResult={selectResult} />
         </div>
 
-        <IconButton>
+        <IconButton
+          onClick={() => dispatch(setLoading({ name: "group", loading: true }))}
+        >
           <RateReviewOutlinedIcon />
         </IconButton>
       </div>
