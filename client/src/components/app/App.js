@@ -1,16 +1,23 @@
 import "./App.css";
 import Imessage from "../imessage/imessage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import history from "../../utils/history";
 import { Route, Router, Switch } from "react-router-dom";
-import { selectUser } from "../../features/userSlice";
-import Login from "../authorize/login/login";
+import { selectUser, login } from "../../features/userSlice";
+import Login from "../authorize/login";
 import { useEffect } from "react";
-import Register from "../authorize/register/register";
+import Register from "../authorize/register";
 
 function App() {
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
+  // Try login from session after refresh
+  useEffect(() => {
+    dispatch(login());
+  }, []);
+
+  // Redirect to login if user not logged in
   useEffect(() => {
     if (!user) {
       history.push("/login");

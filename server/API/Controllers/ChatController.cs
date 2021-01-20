@@ -13,7 +13,7 @@ using Service.Hubs;
 
 namespace API.Controllers
 {
-    [Route("api/")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class ChatController : ControllerBase
@@ -25,20 +25,7 @@ namespace API.Controllers
             _chatService = chatService;
         }
 
-        /// <summary>
-        /// Search user with Name or Email
-        /// </summary>
-        /// <param name="userSearch"></param>
-        /// <param name="maxResults"></param>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        [HttpGet("user/search")]
-        public async Task<IActionResult> SearchContact(string userSearch,int maxResults=5,int page=0)
-        {
-            var users = await _chatService.SearchContactAsync(userSearch, maxResults, page);
-            return Ok(users);
-        }
-
+        
         /// <summary>
         /// Get all messages from a user
         /// </summary>
@@ -46,7 +33,7 @@ namespace API.Controllers
         /// <param name="maxResults"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        [HttpGet("chat/messages")]
+        [HttpGet("messages")]
         public async Task<IActionResult> GetMessages(string userId,int maxResults=20,int page=0)
         {
             var toUserId= User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -59,7 +46,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        [HttpPost("chat/create-group")]
+        [HttpPost("create-group")]
         public async Task<IActionResult> CreateGroup(Group group)
         {
             var response = await _chatService.CreateGroupAsync(group);
@@ -73,7 +60,7 @@ namespace API.Controllers
         /// <param name="groupId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpPut("chat/add-group-user")]
+        [HttpPut("add-group-user")]
         public async Task<IActionResult> AddUserToGroup(string groupId, string[] userId)
         {
             var response=await _chatService.AddUserToGroupAsync(groupId, userId);

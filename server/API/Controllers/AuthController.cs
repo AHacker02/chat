@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using Common.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Abstractions;
@@ -45,7 +46,16 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> SignUp(UserViewModel userData)
-            => Ok(await _authService.SignUpAsync(userData));
+        {
+            var response = await _authService.SignUpAsync(userData);
+
+            if (response.IsSuccess)
+            {
+                return Created("", response);
+            }
+
+            return BadRequest(response);
+        }
 
 
         /// <summary>
@@ -56,5 +66,20 @@ namespace API.Controllers
         [HttpGet("check-email")]
         public async Task<IActionResult> CheckEmail(string email)
             => Ok(await _authService.CheckEmailAsync(email));
+
+        /// <summary>
+        /// Search user with Name or Email
+        /// </summary>
+        /// <param name="userSearch"></param>
+        /// <param name="maxResults"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("search-user")]
+        public async Task<IActionResult> SearchContact(string userSearch, int maxResults = 5, int page = 0)
+        {
+            var users = await _authService.SearchContactAsync(userSearch, maxResults, page);
+            return Ok(users);
+        }
     }
 }

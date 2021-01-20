@@ -13,7 +13,6 @@ namespace Common.Models
         public string LastName { get; set; }
         public string Photo { get; set; }
         public string Password { get; set; }
-        public DateTime CreatedAt { get; set; }
         public string ClientId { get; set; }
         public string Status { get; set; }
     }

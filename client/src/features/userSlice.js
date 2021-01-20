@@ -4,25 +4,29 @@ import { LOGIN, SIGNUP } from "../utils/endpoints";
 import { setFormError, setLoading } from "./appSlice";
 import { resetChat } from "./chatSlice";
 
-const initialUser = sessionStorage.getItem("user")
-  ? JSON.parse(sessionStorage.getItem("user"))
-  : null;
+const initialUser = { user: null, token: null };
 
 export const login = createAsyncThunk(
   "user/login",
-  async (userCreds, thunkAPI) => {
-    try {
-      thunkAPI.dispatch(setLoading({ name: "login", loading: true }));
-      const response = await api.get(LOGIN, {
-        params: userCreds,
-      });
-      thunkAPI.dispatch(setLoading({ name: "login", loading: false }));
+  async (userCreds = null, thunkAPI) => {
+    if (sessionStorage.getItem("user")) {
+      return JSON.parse(sessionStorage.getItem("user"));
+    } else if (userCreds) {
+      try {
+        thunkAPI.dispatch(setLoading({ name: "login", loading: true }));
+        const response = await api.get(LOGIN, {
+          params: userCreds,
+        });
+        thunkAPI.dispatch(setLoading({ name: "login", loading: false }));
 
-      return response.data.data;
-    } catch (err) {
-      thunkAPI.dispatch(setFormError({ name: "login", error: err.message }));
-      thunkAPI.dispatch(setLoading({ name: "login", loading: false }));
-      throw new Error(err);
+        return response.data.data;
+      } catch (err) {
+        thunkAPI.dispatch(setFormError({ name: "login", error: err.message }));
+        thunkAPI.dispatch(setLoading({ name: "login", loading: false }));
+        throw new Error(err);
+      }
+    } else {
+      throw new Error();
     }
   }
 );

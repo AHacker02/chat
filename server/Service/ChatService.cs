@@ -37,24 +37,6 @@ namespace Service
             _groupRepository = groupRepository;
         }
 
-        public async Task<Response<IEnumerable<UserViewModel>>> SearchContactAsync(string userSearch, int maxResults, int page)
-        {
-            var term = userSearch.Split().ToList();
-            var users = (await _userRepository.GetAllUserAsync())
-                .Where(u =>
-                    u.Email.Contains(term[0])
-                    || u.FirstName.Contains(term[0])
-                    || u.LastName.Contains(term[0])
-                    || (term.LastOrDefault() != null && u.LastName.Contains(term.LastOrDefault()))
-                )
-                .Skip(page * maxResults)
-                .Take(maxResults);
-
-            return new Response<IEnumerable<UserViewModel>>()
-            { Data = _map.Map<IEnumerable<UserViewModel>>(users), IsSuccess = true };
-        }
-
-
         public async Task<Response<IEnumerable<Message>>> GetMessagesAsync(string toUserId, string fromUserId,
             int maxResults,
             int page)

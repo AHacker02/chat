@@ -10,16 +10,6 @@ namespace Service.Abstractions
     public interface IChatService
     {
         /// <summary>
-        /// Search user by email or name
-        /// </summary>
-        /// <param name="userSearch"></param>
-        /// <param name="maxResults"></param>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        Task<Response<IEnumerable<UserViewModel>>> SearchContactAsync(string userSearch, int maxResults, int page);
-
-
-        /// <summary>
         /// Get all messages between two users
         /// </summary>
         /// <param name="toUserId"></param>

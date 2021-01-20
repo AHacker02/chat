@@ -1,0 +1,36 @@
+@startuml Login
+skinparam Style strictuml
+actor User
+participant UI
+participant Server
+database DB
+
+User->UI:Enter email and password
+    UI->Server ++: /login/email=&password=
+        Server->DB ++:Check if user exists
+        return bool
+        Server->DB: Get user details
+        Server->Server:Check password
+        Server->Server:Generate JWT token
+return User details and token
+@enduml
+
+
+@startuml Register
+skinparam Style strictuml
+actor User
+participant UI
+participant Server
+database DB
+
+User->UI:Enter user details
+    UI->Server ++: check-email/email
+    Server->DB ++:Check if user exists
+        return bool
+    return user exists?
+    UI->Server ++: register(userDetails)
+        Server->Server :Encrypt password
+        Server->DB: Create new user
+        Server->DB:Add user to "Welcome" group
+return Created
+@enduml

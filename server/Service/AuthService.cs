@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Common;
@@ -31,7 +33,7 @@ namespace Service
 
             if (user == null)
             {
-                response.Message = "User does not exist";
+                response.Message = "Email does not exist. Please register if you are new";
             }
             else
             {
@@ -49,7 +51,7 @@ namespace Service
                 }
                 else
                 {
-                    response.Message = "Username or Password is incorrect";
+                    response.Message = "Email or Password is incorrect";
                 }
             }
             return response;
@@ -62,7 +64,7 @@ namespace Service
             //Check if email already used
             if (await _userRepository.UserExistsAsync(userData.Email))
             {
-                response.Message = "Username already taken";
+                response.Message = "Email already in use. Please login or use another email";
                 return response;
             }
 
@@ -81,10 +83,30 @@ namespace Service
 
         public async Task<Response> CheckEmailAsync(string email)
         {
-            var response = new Response {IsSuccess = !await _userRepository.UserExistsAsync(email)};
-            response.Message = response.IsSuccess ? null : "Email is already registered";
+            
+            var response = new Response {IsSuccess = true};
+            var userExists = await _userRepository.UserExistsAsync(email);
+            response.Message = userExists ? "Email already in use. Please login or use another email" : "Email does not exist. Please register if you are new";
             return response;
         }
+
+        public async Task<Response<IEnumerable<UserViewModel>>> SearchContactAsync(string userSearch, int maxResults, int page)
+        {
+            var term = userSearch.Split().ToList();
+            var users = (await _userRepository.GetAllUserAsync())
+                .Where(u =>
+                    u.Email.Contains(term[0])
+                    || u.FirstName.Contains(term[0])
+                    || u.LastName.Contains(term[0])
+                    || (term.LastOrDefault() != null && u.LastName.Contains(term.LastOrDefault()))
+                )
+                .Skip(page * maxResults)
+                .Take(maxResults);
+
+            return new Response<IEnumerable<UserViewModel>>()
+                { Data = _map.Map<IEnumerable<UserViewModel>>(users), IsSuccess = true };
+        }
+
 
         private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {

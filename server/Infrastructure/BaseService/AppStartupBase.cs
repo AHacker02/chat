@@ -55,7 +55,8 @@ namespace BaseService
                     options
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .WithOrigins("http://localhost:3000")
+                        .SetIsOriginAllowed(origin => true)
+                        //.WithOrigins("https://imessage-clone-54a5a.web.app", "http://localhost:3000")
                         .AllowCredentials()
             );
             });
