@@ -34,3 +34,48 @@ User->UI:Enter user details
         Server->DB:Add user to "Welcome" group
 return Created
 @enduml
+
+@startuml Search
+skinparam Style strictuml
+actor User
+participant UI
+participant Server
+database DB
+
+User->UI:Enter types search term (onKeyUp)
+    UI->Server ++: search-user($term,$maxResults,$page)
+    Server->DB :Search users with FirstName,LastName, Email
+return Users list
+@enduml
+
+@startuml SendMessage
+skinparam Style strictuml
+actor User1
+actor User2
+participant UI
+participant Server
+database DB
+
+User2->UI:Type message
+    UI->Server ++: SendMessage($threadId,$message)
+    Server->DB :Add message to thread
+    Server -> User1: Send message if online
+return Message
+@enduml
+
+@startuml Conversation
+skinparam Style strictuml
+actor User
+actor ConversationUsers
+participant UI
+participant Server
+participant SignalR
+database DB
+
+User->UI:Select User / Create Group
+    UI->Server ++: create-group({groupName:,users:[]})
+    Server -> DB : Create new conversation thread
+    Server->SignalR :Add users to signalR group
+    Server -> ConversationUsers: new Conversation()
+return ThreadId
+@enduml
