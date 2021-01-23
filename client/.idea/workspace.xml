@@ -5,31 +5,71 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b986fff2-61fa-4f6e-8863-f980b77908da" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/authorize/authorize.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/scrollHook.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/app/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/app/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/authorize/login/login.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/authorize/login/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/authorize/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/authorize/register/register.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/authorize/register/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/authorize/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/features/userSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/userSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/asset-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.a60f3de0.chunk.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/css/main.a60f3de0.chunk.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/2.92f5a712.chunk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/2.92f5a712.chunk.js.LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/2.92f5a712.chunk.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.2242435e.chunk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.2242435e.chunk.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat/chat.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat/chat.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat/chat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat/message/message.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat/message/message.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chat/message/message.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat/message/message.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/SearchUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/SearchUser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/formtextfield.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/formtextfield.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/group/group.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/group/group.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/group/group.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/group/groupFormModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/imessage/imessage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/imessage/imessage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/imessage/imessage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/imessage/imessage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sidebar/sidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar/sidebar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sidebar/sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar/sidebar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sidebar/sidebarchat/sidebarchat.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar/sidebarchat/sidebarchat.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sidebar/sidebarchat/sidebarchat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar/sidebarchat/sidebarchat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/chatSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/chatSlice.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/endpoints.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/endpoints.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../readme/design.plantUML" beforeDir="false" afterPath="$PROJECT_DIR$/../readme/design.plantUML" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/API/API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/API.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/API/ChatModule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/ChatModule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/API/ChatProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/ChatProfile.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/API/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/Controllers/AuthController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/API/Controllers/ChatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/Controllers/ChatController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/API/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/API/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/Startup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/API/WebSocketMiddleware.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/WebSocketMiddleware.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/API/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/API/appsettings.Production.json" beforeDir="false" afterPath="$PROJECT_DIR$/../server/API/appsettings.Production.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Common/DataSets/Group.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Common/DataSets/Message.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Common/DataSets/Message.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Common/DataSets/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Common/DataSets/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Common/Extensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Common/Extensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Common/Models/ContactsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Common/Models/ContactsViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/Common/Models/Response.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Common/Models/Response.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Common/Models/UserAuthToken.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Common/Models/UserAuthToken.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/Common/Models/UserViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Common/Models/UserViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/Infrastructure/BaseService/AppStartupBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Infrastructure/BaseService/AppStartupBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/Infrastructure/BaseService/BaseService.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Infrastructure/BaseService/BaseService.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Infrastructure/DataAccess/Abstractions/INoSqlDataAccess.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Infrastructure/DataAccess/Abstractions/INoSqlDataAccess.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Infrastructure/DataAccess/MongoDb/MongoConnectionFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Infrastructure/DataAccess/MongoDb/MongoConnectionFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Infrastructure/DataAccess/MongoDb/MongoDbDataAccess.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Infrastructure/DataAccess/MongoDb/MongoDbDataAccess.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Repository/Abstractions/IGroupRepository.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Repository/Abstractions/IMessageRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Repository/Abstractions/IMessageRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Repository/Abstractions/IUserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Repository/Abstractions/IUserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Repository/GroupRepository.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Repository/MessageRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Repository/MessageRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Repository/RepositoryModule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Repository/RepositoryModule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Repository/UserRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/Service/Abstractions/IAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Service/Abstractions/IAuthService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/Service/Abstractions/IChatService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Service/Abstractions/IChatService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/Service/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Service/AuthService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/Service/ChatService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Service/ChatService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Service/Hubs/ChatHub.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Service/Hubs/ChatHub.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/Service/Service.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../server/Service/Service.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +79,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -131,7 +171,11 @@
       <workItem from="1610601239380" duration="21676000" />
       <workItem from="1610803368238" duration="2162000" />
       <workItem from="1610814045349" duration="2888000" />
-      <workItem from="1611135490334" duration="12711000" />
+      <workItem from="1611135490334" duration="15847000" />
+      <workItem from="1611198970561" duration="1098000" />
+      <workItem from="1611224259033" duration="668000" />
+      <workItem from="1611230976203" duration="18015000" />
+      <workItem from="1611384997167" duration="12492000" />
     </task>
     <servers />
   </component>
@@ -162,8 +206,13 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/features/userSlice.js</url>
           <line>57</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/components/chat/chat.js</url>
+          <line>11</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

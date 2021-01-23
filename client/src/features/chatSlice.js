@@ -4,7 +4,20 @@ import api from "../utils/api";
 import { CREATE_GROUP, MESSAGES, SEARCH } from "../utils/endpoints";
 
 let cancelToken;
+const INITIAL_STATE = {
+  chats: {},
+  selectedChat: null,
+  searchResult: [],
+};
 
+const shortenMessage = (message) => {
+  if (message.length > 30) {
+    return message.substr(0, 30) + "...";
+  }
+  return message;
+};
+
+// Search users bu Name or email
 export const searchContact = createAsyncThunk(
   "chat/search",
   async (searchTerm, thunkAPI) => {
@@ -21,15 +34,25 @@ export const searchContact = createAsyncThunk(
   }
 );
 
+// Get last 20 messages for selected chat
 export const selectChat = createAsyncThunk(
   "chat/selectChat",
   async (user, thunkAPI) => {
-    const response = await api.get(MESSAGES, {
-      params: {
-        userId: user.id,
-      },
-    });
-    return { ...user, messages: response.data.data };
+    if (thunkAPI.getState().chat.chats[user.id]) {
+      const response = await api.get(MESSAGES, {
+        params: {
+          threadId: user.id,
+        },
+      });
+      return { ...user, messages: response.data.data };
+    } else {
+      const loggedUser = JSON.parse(sessionStorage.getItem("user"));
+      const response = await api.post(
+        CREATE_GROUP,
+        JSON.stringify({ Users: [user.id, loggedUser.user.id] })
+      );
+      return { ...user, id: response.data.data.id, messages: [] };
+    }
   }
 );
 
@@ -40,38 +63,40 @@ export const createGroup = createAsyncThunk(
   }
 );
 
-const INITIAL_STATE = {
-  chats: {},
-  selectedChat: null,
-  searchResult: [],
-};
-
 export const chatSlice = createSlice({
   name: "chat",
   initialState: INITIAL_STATE,
   reducers: {
     setChatList: (state, action) => {
       _.forIn(_.mapKeys(action.payload, "id"), (value, key) => {
+        value.lastMessage = shortenMessage(value.lastMessage);
         state.chats[key] = value;
       });
     },
     setStatus: (state, action) => {
-      state.chats[action.payload.id].status = action.payload.status;
-      state.chats[action.payload.id].clientId = action.payload.clientId;
+      let chat = _.values(state.chats).filter(
+        (x) => x.email === action.payload.email
+      )[0];
+      chat.status = action.payload.status;
+      chat.clientId = action.payload.clientId;
+      state.chats[chat.id] = chat;
     },
     addMessage: (state, action) => {
-      let userId;
-      if (state.chats[action.payload.fromUserId]) {
-        userId = action.payload.fromUserId;
-      } else if (state.chats[action.payload.toUserId]) {
-        userId = action.payload.toUserId;
+      if (!state.chats[action.payload.threadId].messages) {
+        state.chats[action.payload.threadId].messages = [];
       }
-      //state.chats[userId].messages.push(action.payload);
-      state.chats[userId].lastMessage = action.payload.messageText;
-      state.chats[userId].lastMessageTime = action.payload.sentAt;
-      if (state.selectedChat?.id === userId) {
+      state.chats[action.payload.threadId].messages.push(action.payload);
+      state.chats[action.payload.threadId].lastMessage = shortenMessage(
+        action.payload.messageText
+      );
+      state.chats[action.payload.threadId].lastMessageTime =
+        action.payload.sentAt;
+      if (state.selectedChat?.id === action.payload.threadId) {
         state.selectedChat.messages.push(action.payload);
       }
+    },
+    clearChatSelection: (state) => {
+      state.selectedChat = INITIAL_STATE.selectedChat;
     },
     resetChat: (state, action) => {
       return INITIAL_STATE;
@@ -84,7 +109,7 @@ export const chatSlice = createSlice({
     [selectChat.fulfilled]: (state, action) => {
       state.selectedChat = action.payload;
       state.chats[action.payload.id] = action.payload;
-      state.searchResult = null;
+      state.searchResult = INITIAL_STATE.searchResult;
     },
   },
 });
@@ -93,6 +118,7 @@ export const {
   addMessage,
   setStatus,
   resetChat,
+  clearChatSelection,
 } = chatSlice.actions;
 export const selectedChat = (state) => state.chat.selectedChat;
 export const selectChatList = (state) => state.chat.chats;

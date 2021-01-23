@@ -1,7 +1,7 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Threading.Tasks;
-using MongoDB.Bson;
 using IConnectionFactory = DataAccess.Abstractions.IConnectionFactory;
 
 namespace DataAccess.MongoDb

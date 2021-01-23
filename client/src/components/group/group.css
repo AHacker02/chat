@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.group__title {
+  padding-bottom: 0 !important;
+}
+
 .group__list {
   display: flex;
   align-items: flex-start;
@@ -29,4 +33,19 @@
 .group__list {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.group__form > button {
+  margin-top: 20px;
+  width: 300px;
+  background-color: #3ea4fb;
+  color: #eff2f5;
+  font-weight: 800;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.group__form > button:hover {
+  background-color: gainsboro;
+  color: #3ea4fb;
 }

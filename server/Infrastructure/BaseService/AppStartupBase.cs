@@ -15,7 +15,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.WebSockets;
 
 namespace BaseService
 {

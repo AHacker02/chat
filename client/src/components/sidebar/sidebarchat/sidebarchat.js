@@ -6,8 +6,11 @@ import { selectChat, selectedChat } from "../../../features/chatSlice";
 import moment from "moment";
 
 const SidebarChat = ({ contact }) => {
+  //#region Variable setup
   const dispatch = useDispatch();
   const selected = useSelector(selectedChat);
+  //#endregion
+
   return (
     <div
       onClick={() => {

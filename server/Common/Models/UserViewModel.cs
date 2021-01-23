@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-
-namespace Common.Models
+﻿namespace Common.Models
 {
     public class UserViewModel
     {
@@ -13,7 +8,6 @@ namespace Common.Models
         public string LastName { get; set; }
         public string Photo { get; set; }
         public string Password { get; set; }
-        public string ClientId { get; set; }
         public string Status { get; set; }
     }
 }

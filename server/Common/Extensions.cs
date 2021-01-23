@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Common.DataSets;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Common.DataSets;
-using Common.Models;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Common
 {

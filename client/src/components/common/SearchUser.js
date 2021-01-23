@@ -6,18 +6,19 @@ import { Autocomplete } from "@material-ui/lab";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoading } from "../../features/appSlice";
 
-const SearchUser = ({ variant = "standard", selectResult }) => {
+const SearchUser = ({ variant = "standard", exclude = [], selectResult }) => {
+  //#region Variable setup
   const dispatch = useDispatch();
   const loading = useSelector((state) => selectLoading(state, "search"));
   const searchResult = useSelector(selectSearchResult);
   const [value, setValue] = useState("");
+  //#endregion
 
   const handleSearch = (e) => {
-    if (e.target.value) {
-      setValue(e.target.value);
-    }
+    setValue(e.target.value);
   };
 
+  // Call Search API to get results
   useEffect(() => {
     if (value !== "") {
       dispatch(searchContact(value));
@@ -36,7 +37,7 @@ const SearchUser = ({ variant = "standard", selectResult }) => {
       loading={loading}
       filterOptions={(options, state) => options}
       getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-      options={searchResult}
+      options={searchResult.filter((r) => !exclude.includes(r.id))}
       renderInput={(params) => (
         <TextField
           onChange={handleSearch}

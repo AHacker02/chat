@@ -1,3 +1,7 @@
-.imessage{
-    display: flex;
+.imessage {
+  display: flex;
+}
+
+.hide {
+  display: none;
 }

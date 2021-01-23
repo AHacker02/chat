@@ -1,39 +1,29 @@
-﻿using System;
+﻿using Common.DataSets;
+using Common.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Common.DataSets;
 
 namespace Repository.Abstractions
 {
     public interface IMessageRepository
     {
         /// <summary>
-        /// Get messages between two users
+        /// Get all messages of a thread
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="maxResults"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        Task<IEnumerable<Message>> GetMessagesBetweenAsync(string to, string from, int maxResults, int page);
-
-
-        /// <summary>
-        /// Get all messages sent to a user
-        /// </summary>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        Task<IQueryable<Message>> GetMessagesToAsync(string to);
+        Task<IEnumerable<Message>> GetThreadMessagesAsync(string threadId, int maxResults, int page);
 
         /// <summary>
-        /// Get all messages sent from a user
+        /// Get all user message threads with last message
         /// </summary>
-        /// <param name="to"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        Task<IQueryable<Message>> GetMessagesFromAsync(string to);
-
+        Task<IQueryable<ContactsViewModel>> GetAllUserThreadsAsync(string userId);
 
         /// <summary>
         /// Add new message
@@ -43,10 +33,25 @@ namespace Repository.Abstractions
         Task AddMessageAsync(Message message);
 
         /// <summary>
-        /// Get all conversations to user
+        /// Create new message thread
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="thread"></param>
         /// <returns></returns>
-        Task<IQueryable<IGrouping<string, Message>>> GetConversationsToUserAsync(string userId);
+        Task AddMessageThreadAsync(MessageThread thread);
+
+        /// <summary>
+        /// Find message thread by id
+        /// </summary>
+        /// <param name="threadId"></param>
+        /// <returns></returns>
+        Task<MessageThread> GetMessageThreadAsync(string threadId);
+
+        /// <summary>
+        /// Add users to group
+        /// </summary>
+        /// <param name="threadId"></param>
+        /// <param name="userIds"></param>
+        /// <returns></returns>
+        Task AddUsersToGroupAsync(string threadId, string[] userIds);
     }
 }

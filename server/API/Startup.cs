@@ -1,27 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using BaseService;
 using DataAccess.MongoDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Repository;
 using Service.Hubs;
 
 namespace API
 {
-    public class Startup:AppStartupBase
+    public class Startup : AppStartupBase
     {
-        public Startup(IConfiguration configuration,IWebHostEnvironment env) : base(env,configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) : base(env, configuration)
         {
         }
 
@@ -33,6 +26,8 @@ namespace API
             //    options.ClientTimeoutInterval=TimeSpan.FromSeconds(5);
             //});
             services.AddSignalR();
+            services.AddHealthChecks()
+                .AddMongoDb(mongodbConnectionString:Configuration["mongo:connectionString"],name:"mongo",failureStatus:HealthStatus.Unhealthy);
             base.ConfigureApplicationServices(services, new OpenApiInfo
             {
                 Version = "v1",
@@ -61,15 +56,16 @@ namespace API
 
                 await next.Invoke();
             });
-            
+            app.UseHealthChecks("/healthcheck");
+
             base.ConfigureApplication(app, env);
-            
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChatHub>("/chat");
             });
-            
+
         }
     }
 }

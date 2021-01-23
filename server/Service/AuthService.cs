@@ -1,32 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Common;
 using Common.DataSets;
 using Common.Models;
 using Microsoft.Extensions.Configuration;
 using Repository.Abstractions;
 using Service.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Service
 {
-    public class AuthService:IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IMapper _map;
+        private readonly IChatService _chatService;
 
-        public AuthService(IUserRepository userRepository, IConfiguration configuration,IMapper map)
+        public AuthService(IUserRepository userRepository, IConfiguration configuration, IMapper map,IChatService chatService)
         {
             _userRepository = userRepository;
             _configuration = configuration;
             _map = map;
+            _chatService = chatService;
         }
         public async Task<Response<UserAuthToken>> LoginAsync(string email, string password)
         {
-            var response=new Response<UserAuthToken>();
+            var response = new Response<UserAuthToken>();
 
             //Get User if exists
             var user = await _userRepository.GetUserByEmailAsync(email);
@@ -59,7 +61,7 @@ namespace Service
 
         public async Task<Response> SignUpAsync(UserViewModel userData)
         {
-            var response=new Response();
+            var response = new Response();
 
             //Check if email already used
             if (await _userRepository.UserExistsAsync(userData.Email))
@@ -73,18 +75,19 @@ namespace Service
             CreatePasswordHash(userData.Password, out byte[] passwordHash, out byte[] passwordSalt);
             user.Password = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.CreatedAt=DateTime.UtcNow;
+            user.CreatedAt = DateTime.UtcNow;
 
             //Add user
             await _userRepository.AddUserAsync(user);
+            await _chatService.AddUserToWelcomeGroup(user.Id);
             response.IsSuccess = true;
             return response;
         }
 
         public async Task<Response> CheckEmailAsync(string email)
         {
-            
-            var response = new Response {IsSuccess = true};
+
+            var response = new Response { IsSuccess = true };
             var userExists = await _userRepository.UserExistsAsync(email);
             response.Message = userExists ? "Email already in use. Please login or use another email" : "Email does not exist. Please register if you are new";
             return response;
@@ -104,7 +107,7 @@ namespace Service
                 .Take(maxResults);
 
             return new Response<IEnumerable<UserViewModel>>()
-                { Data = _map.Map<IEnumerable<UserViewModel>>(users), IsSuccess = true };
+            { Data = _map.Map<IEnumerable<UserViewModel>>(users), IsSuccess = true };
         }
 
 

@@ -1,11 +1,11 @@
 ﻿using DataAccess.Abstractions;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using MongoDB.Bson;
 
 namespace DataAccess.MongoDb
 {
@@ -48,6 +48,13 @@ namespace DataAccess.MongoDb
             collection = collection ?? _collection;
             var _db = await _connection.GetConnection();
             return _db.GetCollection<T>(collection).AsQueryable();
+        }
+
+        public async Task<IMongoCollection<T>> Collection<T>(string collection = null) where T : class, new()
+        {
+            collection = collection ?? _collection;
+            var _db = await _connection.GetConnection();
+            return _db.GetCollection<T>(collection);
         }
 
         public async Task<IQueryable<T>> All<T>(int page, int pageSize, string collection = null) where T : class, new()

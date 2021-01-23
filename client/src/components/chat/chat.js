@@ -1,17 +1,33 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./chat.css";
-import { IconButton } from "@material-ui/core";
-import MicNoneIcon from "@material-ui/icons/MicNone";
 import FlipMove from "react-flip-move";
 import Message from "./message/message";
-import { selectedChat } from "../../features/chatSlice";
-import { useSelector } from "react-redux";
+import { clearChatSelection, selectedChat } from "../../features/chatSlice";
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
+import { useScrollToBttom } from "../../utils/scrollHook";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
 const Chat = ({ sendMessage }) => {
+  //#region Variable setup
   const [input, setInput] = useState("");
+  const [bottomRef, scrollToBottom] = useScrollToBttom();
   const chat = useSelector(selectedChat);
+  const isMobile = window.innerWidth <= 768;
+  const [hide, setHide] = useState(false);
+  const dispatch = useDispatch();
   let messages;
+  //#endregion
+
+  const renderBack = () => {
+    if (isMobile) {
+      return (
+        <ArrowBackIosIcon onClick={() => dispatch(clearChatSelection())} />
+      );
+    }
+  };
+
+  // Sort messages in descending order by  time
   if (chat) {
     try {
       messages = chat.messages;
@@ -21,15 +37,15 @@ const Chat = ({ sendMessage }) => {
     }
   }
 
-  const bottomRef = useRef();
+  useEffect(() => {
+    if (isMobile && !chat) {
+      setHide(true);
+    } else {
+      setHide(false);
+    }
+  }, [chat]);
 
-  const scrollToBottom = () => {
-    bottomRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
-
+  //#region Scroll to bottom
   useEffect(() => {
     scrollToBottom();
   }, [chat]);
@@ -37,10 +53,12 @@ const Chat = ({ sendMessage }) => {
   useEffect(() => {
     scrollToBottom();
   }, []);
+  //#endregion
 
   return (
-    <div className="chat">
+    <div className={hide ? "chat hide" : "chat"}>
       <div className="chat__header">
+        {renderBack()}
         <h4>
           To:{" "}
           <span className="chat__name">

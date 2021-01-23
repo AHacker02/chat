@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Common.DataSets;
+﻿using Common.DataSets;
 using DataAccess.Abstractions;
 using Repository.Abstractions;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly INoSqlDataAccess _database;
 
@@ -24,7 +23,7 @@ namespace Repository
             => await _database.Single<User>(u => u.Email.Equals(email));
 
         public async Task<User> GetUserByIdAsync(string id)
-            => await _database.Single<User>(u => u.Id==id);
+            => await _database.Single<User>(u => u.Id == id);
 
         public async Task<IQueryable<User>> GetAllUserAsync()
             => await _database.All<User>();

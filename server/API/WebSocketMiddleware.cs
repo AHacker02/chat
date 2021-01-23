@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace API
 {
@@ -24,7 +21,7 @@ namespace API
 
             if (request.Query.TryGetValue("access_token", out var accessToken))
             {
-                request.Headers.Add("Authorization",$"Bearer {accessToken}");
+                request.Headers.Add("Authorization", $"Bearer {accessToken}");
             }
 
             await _next(httpContext);

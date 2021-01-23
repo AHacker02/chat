@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Common.DataSets;
+﻿using Common.DataSets;
 using Common.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Service.Abstractions
 {
@@ -12,26 +10,27 @@ namespace Service.Abstractions
         /// <summary>
         /// Get all messages between two users
         /// </summary>
-        /// <param name="toUserId"></param>
-        /// <param name="fromUserId"></param>
+        /// <param name="threadId"></param>
         /// <param name="maxResults"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        Task<Response<IEnumerable<Message>>> GetMessagesAsync(string toUserId,string fromUserId, int maxResults, int page);
+        Task<Response<IEnumerable<Message>>> GetMessagesAsync(string threadId, int maxResults, int page);
 
         /// <summary>
         /// Create group
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        Task<Response> CreateGroupAsync(Group @group);
+        Task<Response<MessageThread>> CreateGroupAsync(Group @group);
 
         /// <summary>
         /// Add users to group
         /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="userId"></param>
+        /// <param name="threadId"></param>
+        /// <param name="userIds"></param>
         /// <returns></returns>
-        Task<Response> AddUserToGroupAsync(string groupId, string[] userId);
+        Task<Response> AddUserToGroupAsync(string threadId, string[] userIds);
+
+        Task AddUserToWelcomeGroup(string userId);
     }
 }

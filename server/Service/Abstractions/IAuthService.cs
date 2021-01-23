@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Common.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Common.Models;
 
 namespace Service.Abstractions
 {

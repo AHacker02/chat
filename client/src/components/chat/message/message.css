@@ -1,32 +1,34 @@
 .message {
-    display: flex;
-    align-items: center;
-    position: relative;
-    width: fit-content;
-    justify-content: space-between;
-    margin: 15px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: fit-content;
+  justify-content: space-between;
+  margin: 15px;
+  max-width: 80%;
+  word-break: break-all;
 }
 
-.message__sender{
-    margin-left: auto;
+.message__sender {
+  margin-left: auto;
 }
-.message__sender >p{
-    background-color: #3cabfa !important;
-    color: white;
+.message__sender > p {
+  background-color: #3cabfa !important;
+  color: white;
 }
 
 .message > p {
-    background-color: #f3f3f5;
-    font-size: medium;
-    padding: 15px;
-    border-radius: 20px;
-    margin: 10px auto 10px 10px;
+  background-color: #f3f3f5;
+  font-size: medium;
+  padding: 15px;
+  border-radius: 20px;
+  margin: 10px auto 10px 10px;
 }
 
 .message > small {
-    color: gray;
-    position: absolute;
-    font-size: 8px;
-    bottom: -5px;
-    right: 0;
+  color: gray;
+  position: absolute;
+  font-size: 8px;
+  bottom: -5px;
+  right: 0;
 }

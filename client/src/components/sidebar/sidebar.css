@@ -1,6 +1,5 @@
 .sidebar {
   flex: 0.35;
-  max-width: 35%;
   height: 100vh;
   flex-direction: column;
   display: flex;
@@ -58,4 +57,27 @@
 .sidebar__chat {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  flex: 1;
+}
+
+.sidebar__footer {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-top: 1px solid lightgray;
+  background-color: #f5f5f5;
+  height: 32px;
+}
+
+.sidebar__footer > a > svg {
+  margin: 0px 4px;
+  color: gray;
+  max-height: 32px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    flex: 1;
+    height: 95vh;
+  }
 }

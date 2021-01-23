@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Common.DataSets;
 using System.Linq;
 using System.Threading.Tasks;
-using Common.DataSets;
 
 namespace Repository.Abstractions
 {

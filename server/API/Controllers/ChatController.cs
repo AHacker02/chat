@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Common.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Service.Abstractions;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Common.DataSets;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Service.Abstractions;
-using Service.Hubs;
 
 namespace API.Controllers
 {
@@ -25,19 +19,18 @@ namespace API.Controllers
             _chatService = chatService;
         }
 
-        
+
         /// <summary>
         /// Get all messages from a user
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="threadId"></param>
         /// <param name="maxResults"></param>
         /// <param name="page"></param>
         /// <returns></returns>
         [HttpGet("messages")]
-        public async Task<IActionResult> GetMessages(string userId,int maxResults=20,int page=0)
+        public async Task<IActionResult> GetMessages(string threadId, int maxResults = 20, int page = 0)
         {
-            var toUserId= User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var messages = await _chatService.GetMessagesAsync(toUserId,userId, maxResults, page);
+            var messages = await _chatService.GetMessagesAsync(threadId, maxResults, page);
             return Ok(messages);
         }
 
@@ -63,7 +56,7 @@ namespace API.Controllers
         [HttpPut("add-group-user")]
         public async Task<IActionResult> AddUserToGroup(string groupId, string[] userId)
         {
-            var response=await _chatService.AddUserToGroupAsync(groupId, userId);
+            var response = await _chatService.AddUserToGroupAsync(groupId, userId);
             return Ok(response);
         }
     }

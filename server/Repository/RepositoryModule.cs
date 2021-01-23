@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autofac;
+﻿using Autofac;
 using DataAccess.Abstractions;
 using DataAccess.MongoDb;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +6,7 @@ using Repository.Abstractions;
 
 namespace Repository
 {
-    public class RepositoryModule:Module
+    public class RepositoryModule : Module
     {
         private readonly IConfiguration _configuration;
 
@@ -24,24 +21,19 @@ namespace Repository
             {
                 var connection = c.Resolve<IConnectionFactory>();
                 var collection = _configuration["mongo:collection:user"];
-                var db=new MongoDbDataAccess(connection,collection);
+                var db = new MongoDbDataAccess(connection, collection);
                 return new UserRepository(db);
             });
 
             builder.Register<IMessageRepository>(c =>
             {
                 var connection = c.Resolve<IConnectionFactory>();
-                var collection = _configuration["mongo:collection:chat"];
-                var db = new MongoDbDataAccess(connection, collection);
-                return new MessageRepository(db);
-            });
-
-            builder.Register<IGroupRepository>(c =>
-            {
-                var connection = c.Resolve<IConnectionFactory>();
-                var collection = _configuration["mongo:collection:group"];
-                var db = new MongoDbDataAccess(connection, collection);
-                return new GroupRepository(db);
+                
+                return new MessageRepository(
+                    new MongoDbDataAccess(connection, _configuration["mongo:collection:message"]), 
+                    new MongoDbDataAccess(connection, _configuration["mongo:collection:thread"]),
+                    c.Resolve<IUserRepository>()
+                    );
             });
         }
     }

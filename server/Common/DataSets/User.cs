@@ -1,6 +1,6 @@
-﻿using System;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace Common.DataSets
 {
@@ -18,7 +18,7 @@ namespace Common.DataSets
         public DateTime CreatedAt { get; set; }
         public string ClientId { get; set; }
         public string Status { get; set; }
-        
-        
+
+
     }
 }
